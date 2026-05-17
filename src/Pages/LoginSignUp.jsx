@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { login, signup } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const LoginSignUp = () => {
   const [loginMode, setLoginMode] = useState(false);
     const navigate = useNavigate();
@@ -10,7 +13,7 @@ const LoginSignUp = () => {
     password: ""
   });
 
-  const [message, setMessage] = useState(""); // ✅ for success/error
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -28,7 +31,7 @@ const LoginSignUp = () => {
       });
 
       console.log("Login Success:", res);
-      setMessage("✅ Login successful");
+      toast.success("✅ Login successful");
         navigate("/todo");
     } catch (err) {
       console.log("FULL ERROR:", err);
@@ -36,7 +39,7 @@ const LoginSignUp = () => {
   const msg =
     err?.response?.data?.message || err.message || "Login failed";
 
-  setMessage("❌ " + msg);
+  toast.error("❌ " + msg);
     }
   };
 
@@ -46,10 +49,16 @@ const LoginSignUp = () => {
       const res = await signup(formData);
 
       console.log("Signup Success:", res);
-      setMessage("✅ Signup successful");
+   toast.success("Sign successful");
+      setFormData({
+      name: "",
+      email: "",
+      password: "",
+    });
+      setLoginMode(true)
     } catch (err) {
       console.log(err);
-      setMessage("❌ Signup failed");
+      toast.error("❌ Signup failed");
     }
   };
 
@@ -61,12 +70,7 @@ const LoginSignUp = () => {
           {loginMode ? "Login" : "Sign Up"}
         </h1>
 
-        {/* ✅ MESSAGE */}
-        {message && (
-          <p className="text-center text-sm mb-3 text-gray-600">
-            {message}
-          </p>
-        )}
+      <ToastContainer />
 
         <div className="flex flex-col gap-4">
 
@@ -113,7 +117,7 @@ const LoginSignUp = () => {
           <span
             onClick={() => {
               setLoginMode(!loginMode);
-              setMessage(""); // clear message on switch
+             
             }}
             className="text-teal-500 cursor-pointer ml-1"
           >
