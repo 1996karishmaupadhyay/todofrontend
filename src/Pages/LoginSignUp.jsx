@@ -4,16 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const LoginSignUp = () => {
-  const [loginMode, setLoginMode] = useState(false);
-    const navigate = useNavigate();
+  const [loginMode, setLoginMode] = useState(true);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: ""
   });
-
-  
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -22,104 +22,134 @@ const LoginSignUp = () => {
     });
   };
 
-  // ✅ LOGIN FUNCTION
   const handleLogin = async () => {
+    if (!formData.email.trim() || !formData.password.trim()) {
+      toast.warning("⚠️ Email and password are required");
+      return;
+    }
+    setLoading(true);
     try {
       const res = await login({
         email: formData.email,
         password: formData.password
       });
-
-      console.log("Login Success:", res);
-      toast.success("✅ Login successful");
-        navigate("/todo");
+      toast.success("✅ Login successful!");
+      navigate("/todo");
     } catch (err) {
       console.log("FULL ERROR:", err);
-
-  const msg =
-    err?.response?.data?.message || err.message || "Login failed";
-
-  toast.error("❌ " + msg);
+      const msg = err?.message || err || "Login failed";
+      toast.error("❌ " + msg);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ SIGNUP FUNCTION
   const handleSignup = async () => {
+    if (!formData.username.trim() || !formData.email.trim() || !formData.password.trim()) {
+      toast.warning("⚠️ All fields are required");
+      return;
+    }
+    setLoading(true);
     try {
       const res = await signup(formData);
-
-      console.log("Signup Success:", res);
-   toast.success("Sign successful");
+      toast.success("🎉 Signup successful! Please log in.");
       setFormData({
-      name: "",
-      email: "",
-      password: "",
-    });
-      setLoginMode(true)
+        username: "",
+        email: "",
+        password: ""
+      });
+      setLoginMode(true);
     } catch (err) {
       console.log(err);
-      toast.error("❌ Signup failed");
+      const msg = err?.message || err || "Signup failed";
+      toast.error("❌ " + msg);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-[350px]">
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 p-4 relative overflow-hidden font-sans">
+      {/* Decorative gradient blobs */}
+      <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <ToastContainer theme="dark" position="top-right" autoClose={3000} />
+
+      <div className="bg-slate-900/80 border border-slate-800 p-8 rounded-3xl shadow-2xl w-full max-w-md backdrop-blur-md relative z-10">
         
-        <h1 className="text-2xl font-bold text-center mb-4">
+        {/* App Logo */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20 mb-3">
+            <span className="font-bold text-white text-xl">T</span>
+          </div>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-indigo-400 bg-clip-text text-transparent font-sans">
+            TaskSphere
+          </h1>
+          <p className="text-xs text-slate-500 mt-1 font-sans">
+            {loginMode ? "Welcome back! Please login to your account" : "Join us and organize your workspace"}
+          </p>
+        </div>
+
+        <h2 className="text-xl font-bold text-white mb-6 border-b border-slate-800 pb-3 font-sans">
           {loginMode ? "Login" : "Sign Up"}
-        </h1>
+        </h2>
 
-      <ToastContainer />
-
-        <div className="flex flex-col gap-4">
-
+        <div className="flex flex-col gap-5">
           {!loginMode && (
-            <input
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
-              type="text"
-              placeholder="Username"
-            />
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 font-sans">Username</label>
+              <input
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                className="w-full bg-slate-800/40 border border-slate-700/85 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition duration-200 text-sm font-sans"
+                type="text"
+                placeholder="Your username"
+              />
+            </div>
           )}
 
-          <input
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
-            type="email"
-            placeholder="Email"
-          />
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 font-sans">Email</label>
+            <input
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full bg-slate-800/40 border border-slate-700/85 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition duration-200 text-sm font-sans"
+              type="email"
+              placeholder="name@example.com"
+            />
+          </div>
 
-          <input
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400"
-            type="password"
-            placeholder="Password"
-          />
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 font-sans">Password</label>
+            <input
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full bg-slate-800/40 border border-slate-700/85 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition duration-200 text-sm font-sans"
+              type="password"
+              placeholder="••••••••"
+            />
+          </div>
 
-          {/* ✅ BUTTON CALLS DIFFERENT FUNCTIONS */}
           <button
             onClick={loginMode ? handleLogin : handleSignup}
-            className="bg-teal-500 text-white py-2 rounded-md hover:bg-teal-600 transition"
+            disabled={loading}
+            className="w-full py-3.5 bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white rounded-xl font-bold shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 active:scale-[0.98] transition-all duration-200 text-sm mt-3 disabled:opacity-50 disabled:pointer-events-none font-sans"
           >
-            {loginMode ? "Login" : "Sign Up"}
+            {loading ? "Please wait..." : (loginMode ? "Login" : "Sign Up")}
           </button>
         </div>
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center text-slate-400 mt-6 font-sans">
           {loginMode ? "Don't have an account?" : "Already have an account?"}
           <span
             onClick={() => {
               setLoginMode(!loginMode);
-             
             }}
-            className="text-teal-500 cursor-pointer ml-1"
+            className="text-teal-400 hover:text-teal-300 font-semibold cursor-pointer ml-1 transition-colors"
           >
             {loginMode ? "Sign Up" : "Login"}
           </span>
