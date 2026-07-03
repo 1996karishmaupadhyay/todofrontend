@@ -29,7 +29,7 @@ const LoginSignUp = () => {
     }
     setLoading(true);
     try {
-      const res = await login({
+      await login({
         email: formData.email,
         password: formData.password
       });
@@ -51,7 +51,7 @@ const LoginSignUp = () => {
     }
     setLoading(true);
     try {
-      const res = await signup(formData);
+      await signup(formData);
       toast.success("🎉 Signup successful! Please log in.");
       setFormData({
         username: "",
@@ -69,21 +69,21 @@ const LoginSignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 p-4 relative overflow-hidden font-sans">
-      {/* Decorative gradient blobs */}
-      <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="min-h-screen flex items-center justify-center bg-slate-955 text-slate-100 p-4 relative overflow-hidden font-sans">
+      {/* Decorative single-color gradient blobs */}
+      <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <ToastContainer theme="dark" position="top-right" autoClose={3000} />
 
-      <div className="bg-slate-900/80 border border-slate-800 p-8 rounded-3xl shadow-2xl w-full max-w-md backdrop-blur-md relative z-10">
+      <div className="bg-slate-900/80 border border-slate-800/80 p-8 rounded-3xl shadow-2xl w-full max-w-md backdrop-blur-md relative z-10">
         
         {/* App Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20 mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-3">
             <span className="font-bold text-white text-xl">T</span>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-indigo-400 bg-clip-text text-transparent font-sans">
+          <h1 className="text-2xl font-bold text-indigo-400 font-sans tracking-wide">
             TaskSphere
           </h1>
           <p className="text-xs text-slate-500 mt-1 font-sans">
@@ -103,7 +103,7 @@ const LoginSignUp = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full bg-slate-800/40 border border-slate-700/85 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition duration-200 text-sm font-sans"
+                className="w-full bg-slate-850 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition duration-200 text-sm font-sans"
                 type="text"
                 placeholder="Your username"
               />
@@ -116,7 +116,7 @@ const LoginSignUp = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full bg-slate-800/40 border border-slate-700/85 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition duration-200 text-sm font-sans"
+              className="w-full bg-slate-850 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition duration-200 text-sm font-sans"
               type="email"
               placeholder="name@example.com"
             />
@@ -128,7 +128,7 @@ const LoginSignUp = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full bg-slate-800/40 border border-slate-700/85 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition duration-200 text-sm font-sans"
+              className="w-full bg-slate-850 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition duration-200 text-sm font-sans"
               type="password"
               placeholder="••••••••"
             />
@@ -137,7 +137,7 @@ const LoginSignUp = () => {
           <button
             onClick={loginMode ? handleLogin : handleSignup}
             disabled={loading}
-            className="w-full py-3.5 bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white rounded-xl font-bold shadow-lg shadow-teal-500/10 hover:shadow-teal-500/20 active:scale-[0.98] transition-all duration-200 text-sm mt-3 disabled:opacity-50 disabled:pointer-events-none font-sans"
+            className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/20 active:scale-[0.98] transition-all duration-200 text-sm mt-3 disabled:opacity-50 disabled:pointer-events-none font-sans"
           >
             {loading ? "Please wait..." : (loginMode ? "Login" : "Sign Up")}
           </button>
@@ -149,7 +149,7 @@ const LoginSignUp = () => {
             onClick={() => {
               setLoginMode(!loginMode);
             }}
-            className="text-teal-400 hover:text-teal-300 font-semibold cursor-pointer ml-1 transition-colors"
+            className="text-indigo-400 hover:text-indigo-300 font-semibold cursor-pointer ml-1 transition-colors"
           >
             {loginMode ? "Sign Up" : "Login"}
           </span>
